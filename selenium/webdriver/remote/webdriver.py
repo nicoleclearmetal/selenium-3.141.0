@@ -112,7 +112,7 @@ class WebDriver(object):
 
     def __init__(self, command_executor='http://127.0.0.1:4444/wd/hub',
                  desired_capabilities=None, browser_profile=None, proxy=None,
-                 keep_alive=False, file_detector=None, options=None):
+                 keep_alive=False, file_detector=None, options=None, set_cookies=False):
         """
         Create a new driver that will issue commands using the wire protocol.
 
@@ -130,6 +130,8 @@ class WebDriver(object):
          - file_detector - Pass custom file detector object during instantiation. If None,
              then default LocalFileDetector() will be used.
          - options - instance of a driver options.Options class
+         - set_cookies - Whether or not to keep track of Set-Cookie headers and send those
+             cookies on subsequent requests
         """
         capabilities = {}
         if options is not None:
@@ -145,7 +147,7 @@ class WebDriver(object):
             proxy.add_to_capabilities(capabilities)
         self.command_executor = command_executor
         if type(self.command_executor) is bytes or isinstance(self.command_executor, str):
-            self.command_executor = RemoteConnection(command_executor, keep_alive=keep_alive)
+            self.command_executor = RemoteConnection(command_executor, keep_alive=keep_alive, set_cookies=set_cookies)
         self._is_remote = True
         self.session_id = None
         self.capabilities = {}
